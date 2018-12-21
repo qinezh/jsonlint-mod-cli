@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+const program = require("commander");
+const Jsonlinter = require("../dist/lib/jsonlinter.js");
+
+program
+    .version("0.1.0", "-v, --version")
+    .option("--pattern <pattern>", "Specify JSON file path with glob pattern to be linted.")
+    .parse(process.argv);
+
+const linter = new Jsonlinter();
+
+(async function execute() {
+    if (program.pattern) {
+        await linter.lintFiles(program.pattern);
+    }
+})()
+    .then(() => console.log("Done"))
+    .catch(err => {
+        console.error(err.message);
+        process.exit(-1);
+    });
